@@ -162,6 +162,8 @@ bool stereoCalibrate(string stereoCalibrateResult, vector<vector<Point3f>> objec
     stereoCalibrate(objectPoints, imagePoints1, imagePoints2, cameraMatrix1, distCoeffs1,
                     cameraMatrix2, distCoeffs2, imageSize, R, T, E, F, CALIB_FIX_INTRINSIC, criteria); // 注意参数顺序，可以到保存的文件中查看，避免返回时出错
     stereoStore << "imageSize" << imageSize;
+    stereoStore << "Camera_width" << imageSize.width;
+    stereoStore << "Camera_height" << imageSize.height;
     stereoStore << "cameraMatrixL" << cameraMatrix1;
     stereoStore << "cameraMatrixR" << cameraMatrix2;
     stereoStore << "distCoeffsL" << distCoeffs1;
@@ -205,6 +207,14 @@ Rect stereoRectification(string stereoRectifyParams, Mat& cameraMatrix1, Mat& di
     stereoStore << "P1" << P1;
     stereoStore << "P2" << P2;
     stereoStore << "Q" << Q;
+    stereoStore << "Camera_fx" << P1.at<double>(0,0);
+    stereoStore << "Camera_fy" << P1.at<double>(1,1);
+    stereoStore << "Camera_cx" << P1.at<double>(0,2);
+    stereoStore << "Camera_cy" << P1.at<double>(1,2);
+    stereoStore << "Camera_k1" << 0;
+    stereoStore << "Camera_k2" << 0;
+    stereoStore << "Camera_p1" << 0;
+    stereoStore << "Camera_p2" << 0;
     stereoStore.release();
     return validRoi[0], validRoi[1];
 }
@@ -283,7 +293,7 @@ int main(int argc,char *argv[])
     string singleCalibrate_result_L = root_path + "calibrationresults_L.txt";
     string singleCalibrate_result_R = root_path + "calibrationresults_R.txt";
     string stereoRectifyParams = root_path + "stereoRectifyParams.yaml"; // 存放立体矫正结果
-    string stereoCalibrate_result_L = root_path + "stereocalibrateresult_L.yaml";
+    string stereoCalibrate_result = root_path + "stereocalibrateresult.yaml";
 
     vector<vector<Point3f>> objectPoints_L; // 三维坐标
     vector<vector<Point3f>> objectPoints_R;
@@ -311,7 +321,7 @@ int main(int argc,char *argv[])
     cout<<"finish right camera calibration!"<<endl;
 
     //step3 stereo calibration
-    stereoCalibrate(stereoCalibrate_result_L, objectPoints_L, corners_seq_L, corners_seq_R, cameraMatrix_L, distCoeffs_L,
+    stereoCalibrate(stereoCalibrate_result, objectPoints_L, corners_seq_L, corners_seq_R, cameraMatrix_L, distCoeffs_L,
                     cameraMatrix_R, distCoeffs_R, imageSize, R, T, E, F);
     cout<<"finish stereo calibration"<<endl;
 
