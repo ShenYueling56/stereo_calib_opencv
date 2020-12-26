@@ -198,7 +198,7 @@ Rect stereoRectification(string stereoRectifyParams, Mat& cameraMatrix1, Mat& di
     cv::FileStorage stereoStore(stereoRectifyParams, cv::FileStorage::WRITE);
     cout<<cameraMatrix1<<endl<<distCoeffs1<<endl<<cameraMatrix2<<endl<<distCoeffs2<<endl<<imageSize<<endl<<R <<endl<<T<<endl;
     stereoRectify(cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize,
-                  R, T, R1, R2, P1, P2, Q, 0, 0, imageSize, &validRoi[0], &validRoi[1]);
+                  R, T, R1, R2, P1, P2, Q, CALIB_ZERO_DISPARITY, 0, imageSize, &validRoi[0], &validRoi[1]);
     initUndistortRectifyMap(cameraMatrix1, distCoeffs1, R1, P1, imageSize, CV_32FC1, mapl1, mapl2);
     initUndistortRectifyMap(cameraMatrix2, distCoeffs2, R2, P2, imageSize, CV_32FC1, mapr1, mapr2);
     // 计算左右图像的重投影映射表
